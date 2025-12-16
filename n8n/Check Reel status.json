@@ -1,0 +1,422 @@
+{
+  "name": "Check Reel status",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "uaiq2SUUCckXQllg",
+          "mode": "list",
+          "cachedResultName": "videos",
+          "cachedResultUrl": "/projects/chsSxA3l9boH5s98/datatables/uaiq2SUUCckXQllg"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "job_status": "={{ $json.status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "video_title",
+              "displayName": "video_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "video_url",
+              "displayName": "video_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "job_status",
+              "displayName": "job_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "job_id",
+              "displayName": "job_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "d13a86d6-0ddc-447e-a51a-4316b7d443dc",
+      "name": "Update Job Status"
+    },
+    {
+      "parameters": {
+        "url": "=https://vision-agent.api.reka.ai/v1/creator/reels/{{ $json.job_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpBearerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "bc093e75-081c-463e-bc4f-d5b66f5a5843",
+      "name": "Get Job Status",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "MgKBtJ6WnjZ9BSdq",
+          "name": "Reka APIs"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1rcK_aGlKnXArfg-0CfiPpnDUnbRJw48YCwOF0vtJoI0",
+          "mode": "list",
+          "cachedResultName": "video-ready-to-download",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rcK_aGlKnXArfg-0CfiPpnDUnbRJw48YCwOF0vtJoI0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rcK_aGlKnXArfg-0CfiPpnDUnbRJw48YCwOF0vtJoI0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Title": "={{ $('Get Job Status').item.json.output[0].title }}",
+            "Url": "={{ $('Get Job Status').item.json.output[0].video_url }}",
+            "Caption": "={{ $('Get Job Status').item.json.output[0].caption }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Url",
+              "displayName": "Url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Caption",
+              "displayName": "Caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1072,
+        -144
+      ],
+      "id": "4b8f5e95-b8f0-40e8-9fc2-fe65a8a2d677",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hesAn6nVnmklIpwF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "uaiq2SUUCckXQllg",
+          "mode": "list",
+          "cachedResultName": "videos",
+          "cachedResultUrl": "/projects/chsSxA3l9boH5s98/datatables/uaiq2SUUCckXQllg"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_status",
+              "condition": "neq",
+              "keyValue": "=failed"
+            },
+            {
+              "keyName": "job_status",
+              "condition": "neq",
+              "keyValue": "done"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e48b6253-670c-45bf-8f66-5c2813d0c240",
+      "name": "Get Job IDs"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "05a7724a-7952-4897-ba9e-f79f141d5a8e",
+              "leftValue": "completed",
+              "rightValue": "={{ $json.job_status }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        832,
+        0
+      ],
+      "id": "7a475426-2a78-4946-9fed-8658d41725e6",
+      "name": "If completed"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        16,
+        0
+      ],
+      "id": "a1c84b55-d43f-4a6b-9683-f44839ccab9e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "uaiq2SUUCckXQllg",
+          "mode": "list",
+          "cachedResultName": "videos",
+          "cachedResultUrl": "/projects/chsSxA3l9boH5s98/datatables/uaiq2SUUCckXQllg"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_id",
+              "keyValue": "={{ $('Update Job Status').item.json.job_id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "job_status": "done"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "video_title",
+              "displayName": "video_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "video_url",
+              "displayName": "video_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "job_status",
+              "displayName": "job_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "job_id",
+              "displayName": "job_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        -144
+      ],
+      "id": "c1d989c7-57b9-492c-9848-b8f2c3cf0b72",
+      "name": "Set job to done"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Update Job Status": {
+      "main": [
+        [
+          {
+            "node": "If completed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Job Status": {
+      "main": [
+        [
+          {
+            "node": "Update Job Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Job IDs": {
+      "main": [
+        [
+          {
+            "node": "Get Job Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If completed": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Set job to done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get Job IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2a07f09e-48e6-4a3f-b018-044819f23954",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6858c8c7c1e65719f830aa26848bb95a1ee32209522910054674a1335f440bbd"
+  },
+  "id": "QqUBY37RRIVoOXu1",
+  "tags": []
+}
