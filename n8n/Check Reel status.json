@@ -57,8 +57,8 @@
               "removed": false
             },
             {
-              "id": "job_id",
-              "displayName": "job_id",
+              "id": "reka_id",
+              "displayName": "reka_id",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -106,81 +106,6 @@
     },
     {
       "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1rcK_aGlKnXArfg-0CfiPpnDUnbRJw48YCwOF0vtJoI0",
-          "mode": "list",
-          "cachedResultName": "video-ready-to-download",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rcK_aGlKnXArfg-0CfiPpnDUnbRJw48YCwOF0vtJoI0/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rcK_aGlKnXArfg-0CfiPpnDUnbRJw48YCwOF0vtJoI0/edit#gid=0"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "Title": "={{ $('Get Job Status').item.json.output[0].title }}",
-            "Url": "={{ $('Get Job Status').item.json.output[0].video_url }}",
-            "Caption": "={{ $('Get Job Status').item.json.output[0].caption }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "Title",
-              "displayName": "Title",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Url",
-              "displayName": "Url",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Caption",
-              "displayName": "Caption",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        1072,
-        -144
-      ],
-      "id": "4b8f5e95-b8f0-40e8-9fc2-fe65a8a2d677",
-      "name": "Append row in sheet",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "hesAn6nVnmklIpwF",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "operation": "get",
         "dataTableId": {
           "__rl": true,
@@ -208,7 +133,7 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1,
       "position": [
-        208,
+        224,
         0
       ],
       "id": "e48b6253-670c-45bf-8f66-5c2813d0c240",
@@ -272,7 +197,7 @@
           "conditions": [
             {
               "keyName": "job_id",
-              "keyValue": "={{ $('Update Job Status').item.json.job_id }}"
+              "keyValue": "={{ $('Update Job Status').item.json.reka_id }}"
             }
           ]
         },
@@ -314,8 +239,8 @@
               "removed": false
             },
             {
-              "id": "job_id",
-              "displayName": "job_id",
+              "id": "reka_id",
+              "displayName": "reka_id",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -333,10 +258,26 @@
       "typeVersion": 1,
       "position": [
         1280,
-        -144
+        -112
       ],
       "id": "c1d989c7-57b9-492c-9848-b8f2c3cf0b72",
       "name": "Set job to done"
+    },
+    {
+      "parameters": {
+        "subject": "Your Clip is ready",
+        "message": "=Hello!\nYour clip is ready to be downloded.\nTitle: {{ $('Get Job Status').item.json.output[0].title }}\n\nDownload it here: {{ $('Get Job Status').item.json.output[0].video_url }}\n\nDescription: {{ $('Get Job Status').item.json.output[0].caption }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1040,
+        -112
+      ],
+      "id": "2e2c7e10-b216-4535-bc01-6d0401a41787",
+      "name": "Send an email",
+      "webhookId": "5ab36f0b-6476-4f89-bee6-e936ddcd17cb"
     }
   ],
   "pinData": {},
@@ -378,18 +319,7 @@
       "main": [
         [
           {
-            "node": "Append row in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Append row in sheet": {
-      "main": [
-        [
-          {
-            "node": "Set job to done",
+            "node": "Send an email",
             "type": "main",
             "index": 0
           }
@@ -406,13 +336,24 @@
           }
         ]
       ]
+    },
+    "Send an email": {
+      "main": [
+        [
+          {
+            "node": "Set job to done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "2a07f09e-48e6-4a3f-b018-044819f23954",
+  "versionId": "78e941f3-d73f-4e27-8b14-40eb3b9a4879",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "6858c8c7c1e65719f830aa26848bb95a1ee32209522910054674a1335f440bbd"
