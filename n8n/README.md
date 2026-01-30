@@ -2,7 +2,7 @@
 
 Each time there is a new video on a specific YouTube channel, create a short clip from it using AI. This repository contains two different approaches using **n8n** to automate the process of clipping YouTube videos using Reka Clips API.
 
-## Single Workflows - Looping
+## Example 1: Single Workflows - Looping
 
 This is composed of a single **n8n** workflows that gets trigger by new video publish. It then creates a clipping job and wait until done. Once the clip is ready, it sends an email with all the clip info. It's compatible with n8n cloud and self-hosted instances. This template is also available directly from the [n8n community templates](link.reka.ai/n8n-template-api).
 
@@ -19,7 +19,7 @@ This is composed of a single **n8n** workflows that gets trigger by new video pu
 
 ---
 
-## Dual Workflows - Async Processing
+## Example 2: Dual Workflows - Async Processing
 
 This template uses two separate workflows to handle the clip creation process asynchronously. The first workflow is triggered when a new video is published on a specific YouTube channel, creating a clip creation job. The second workflow periodically checks the status of the clip creation jobs and retrieves the clip URL once it's ready. It's a more scalable approach for n8n cloud users as it avoids long-running workflows. It's compatible with n8n cloud and self-hosted instances.
 
@@ -93,6 +93,8 @@ After saving the workflow, activate it to start monitoring the YouTube channel f
 
 If you have any questions or run into issues, feel free to open an issue. You can also join the [Reka Community Discord](https://link.reka.ai/discord) for support and discussions.
 
+---
+
 ## Documentation & Resources
 
 - Documentation for Reka Clips API can be found here: [Clip Generation API (Reka Clip)](https://docs.reka.ai/vision/highlight-reel-generation)
@@ -100,7 +102,6 @@ If you have any questions or run into issues, feel free to open an issue. You ca
 - Video Tutorial [YouTube](https://www.youtube.com/watch?v=DASEXKY86u0)
 
   [![video demo](assets/n8n-template-demo3.gif)](https://www.youtube.com/watch?v=DASEXKY86u0)
-
 
 ## License
 
