@@ -25,3 +25,5 @@ build/
 # OS
 .DS_Store
 Thumbs.db
+
+n8n/instruction.md

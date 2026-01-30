@@ -53,7 +53,7 @@ def create_clip(video_url, api_key):
     # Prepare the request
     payload = {
         "video_urls": [video_url],
-        "prompt": "Create an engaging short video highlighting the best moments",
+        "prompt": "Create an engaging video clip highlighting the best moments",
         "generation_config": {
             "template": "moments",
             "num_generations": 1,
@@ -75,6 +75,8 @@ def create_clip(video_url, api_key):
     print("\nStarting clip generation...")
     print("-" * 40)
 
+    job_id_shown = False
+
     try:
         # Make the API request with streaming enabled
         with requests.post(BASE_URL, headers=headers, json=payload, stream=True) as response:
@@ -82,15 +84,29 @@ def create_clip(video_url, api_key):
 
             # Process each event as it arrives
             for event in stream_events(response):
+                # Show job ID as soon as available (important for recovery)
+                if not job_id_shown and "id" in event:
+                    print(f"Job ID: {event['id']}")
+                    print("(Save this ID to retrieve results if interrupted)")
+                    print("-" * 40)
+                    job_id_shown = True
+
                 status = event.get("status", "unknown")
                 print(f"Status: {status}")
 
-                # Show clip URL when ready
-                if "clips" in event and event["clips"]:
-                    print("\nClip(s) ready!")
-                    for i, clip in enumerate(event["clips"], 1):
-                        if "url" in clip:
-                            print(f"  Clip {i}: {clip['url']}")
+                # Show clip details when job is completed
+                if status == "completed" and "output" in event:
+                    print("\n" + "=" * 40)
+                    print("  CLIP(S) READY!")
+                    print("=" * 40)
+                    for i, clip in enumerate(event["output"], 1):
+                        print(f"\n--- Clip {i} ---")
+                        print(f"Title: {clip.get('title', 'N/A')}")
+                        print(f"URL: {clip.get('video_url', 'N/A')}")
+                        print(f"Caption: {clip.get('caption', 'N/A')}")
+                        hashtags = clip.get("hashtags", [])
+                        if hashtags:
+                            print(f"Hashtags: {' '.join(hashtags)}")
 
     except requests.exceptions.HTTPError as e:
         print(f"API Error: {e}")
